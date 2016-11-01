@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <Window size="457,462" sizebox="0,0,0,0" caption="0,0,0,240" showshadow="true" shadowactiveimage="shadow_active.png" shadowdeactiveimage="shadow_deactive.png" shadowcorner="28,28,28,28">
-    <Font name="宋体" size="12" bold="false" italic="false" default="true"/>
-    <Font name="宋体" size="16" bold="false" italic="false" />
-    <Font name="宋体" size="12" bold="false" italic="false" />
-    <Font name="宋体" size="12" bold="true" italic="false" />
-    <Font name="宋体" size="12" bold="false" italic="false" />
-    <Font name="宋体" size="14" bold="true" italic="false" />
+    <Font id="0" name="宋体" size="12" bold="false" italic="false" default="true"/>
+    <Font id="1" name="宋体" size="16" bold="true" italic="false" />
+    <Font id="2" name="宋体" size="12" bold="false" italic="false" />
+    <Font id="3" name="宋体" size="12" bold="true" italic="false" />
+    <Font id="4" name="宋体" size="12" bold="false" italic="false" />
+    <Font id="5" name="宋体" size="14" bold="true" italic="false" />
 	<Default name="CheckBox" value="textcolor=&quot;#FF9ca1a4&quot; disabledtextcolor=&quot;#FF888888&quot; width=&quot;100&quot; height=&quot;13&quot; textpadding=&quot;20,1,0,0&quot; align=&quot;left&quot; normalimage=&quot;file='checkbox_unchecked_normal.png' dest='0,0,13,13'&quot; hotimage=&quot;file='checkbox_unchecked_hover.png' dest='0,0,13,13'&quot; pushedimage=&quot;file='checkbox_unchecked_pressed.png' dest='0,0,13,13'&quot; disabledimage=&quot;file='check_disable.png' dest='0,0,13,13'&quot; selectedimage=&quot;file='checkbox_checked_normal.png' dest='0,0,13,13'&quot; selectedhotimage=&quot;file='checkbox_checked_hover.png' dest='0,0,13,13'&quot; selectedpushedimage=&quot;file='checkbox_checked_pressed.png' dest='0,0,13,13'&quot; autocalcwidth=&quot;true&quot;"/>
     <TabLayout name="windowbk" bkimage="bg.png">
 		<VerticalLayout>
@@ -23,7 +23,7 @@
 						<Control />
 						<HorizontalLayout>
 							<Control />
-							<Button name="InstallBtn" text="立即安装" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" width="112" height="32" normalimage="NormalBtnNormal.png" hotimage="NormalBtnHover.png" pushedimage="NormalBtnPushed.png" disabledimage="NormalBtnDisabled.png" /> 
+							<Button name="InstallBtn" text="立即安装" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" width="112" height="32" normalimage="NormalBtnNormal.png" hotimage="NormalBtnHover.png" pushedimage="NormalBtnPushed.png" disabledimage="NormalBtnDisabled.png" Font="1"/> 
 							<Control />
 						</HorizontalLayout>
 						<Control />
