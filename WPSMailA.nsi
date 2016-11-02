@@ -80,11 +80,17 @@ Page         instfiles  "" InstallShow
 UninstPage   custom     un.UninstallProgress
 UninstPage   instfiles	""	un.UninstallNow
 Function .onInit
+   nsSkinEngine::NSISInitSkinEngine /NOUNLOAD "${UNINSTALL_DIR}" "InstallPackages.xml" "WizardTab" "true" "WPS邮箱" "c9febcaa5f1519ab06c5f67878499e29" "mui_icon.ico" "true"
+   Pop $Dialog
+   ;初始化MessageBox窗口
+   nsSkinEngine::NSISInitMessageBox "MessageBox.xml" "TitleLab" "TextLab" "CloseBtn" "YESBtn" "NOBtn"
+   Pop $MessageBoxHandle
+   
  ;创建互斥防止重复运行
   System::Call 'kernel32::CreateMutexA(i 0, i 0, t "BoltInstall") i .r1 ?e'
   Pop $R0
   StrCmp $R0 0 +3
-    MessageBox MB_OK|MB_ICONEXCLAMATION "有一个 WPS Mail 安装向导已经运行！"
+    nsSkinEngine::NSISMessageBox "" "有一个 WPS Mail 安装向导已经运行！"
     Abort
 
   KillProcDLL::KillProc "${MAIN_APP_NAME}"     ;强制结束进程
@@ -101,17 +107,11 @@ Function .onInit
 FunctionEnd
 
 Function InstallProgress
-   nsSkinEngine::NSISInitSkinEngine /NOUNLOAD "${UNINSTALL_DIR}" "InstallPackages.xml" "WizardTab" "true" "WPS邮箱" "c9febcaa5f1519ab06c5f67878499e29" "mui_icon.ico" "true"
-   Pop $Dialog
-   ;初始化MessageBox窗口
-   nsSkinEngine::NSISInitMessageBox "MessageBox.xml" "TitleLab" "TextLab" "CloseBtn" "YESBtn" "NOBtn"
-   Pop $MessageBoxHandle
-   
    ;关闭按钮绑定函数
    nsSkinEngine::NSISFindControl "InstallTab_sysCloseBtn"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have InstallTab_sysCloseBtn"
+    nsSkinEngine::NSISMessageBox ""  "Do not have InstallTab_sysCloseBtn"
    ${Else}
     GetFunctionAddress $0 OnInstallCancelFunc
     nsSkinEngine::NSISOnControlBindNSISScript "InstallTab_sysCloseBtn" $0
@@ -122,7 +122,7 @@ Function InstallProgress
    nsSkinEngine::NSISFindControl "WelcomeTab_NextBtn"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have WelcomeTab_NextBtn button"
+    nsSkinEngine::NSISMessageBox ""  "Do not have WelcomeTab_NextBtn button"
    ${Else}
     GetFunctionAddress $0 OnNextBtnFunc    
         nsSkinEngine::NSISOnControlBindNSISScript "WelcomeTab_NextBtn"  $0
@@ -134,7 +134,7 @@ Function InstallProgress
    nsSkinEngine::NSISFindControl "InstallTab_InstallFilePath"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have InstallTab_InstallFilePath"
+    nsSkinEngine::NSISMessageBox ""  "Do not have InstallTab_InstallFilePath"
    ${Else}
    
     GetFunctionAddress $0 OnTextChangeFunc
@@ -147,7 +147,7 @@ Function InstallProgress
    nsSkinEngine::NSISFindControl "InstallTab_SelectFilePathBtn"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have InstallTab_SelectFilePathBtn button"
+    nsSkinEngine::NSISMessageBox ""  "Do not have InstallTab_SelectFilePathBtn button"
    ${Else}
     GetFunctionAddress $0 OnInstallPathBrownBtnFunc    
         nsSkinEngine::NSISOnControlBindNSISScript "InstallTab_SelectFilePathBtn"  $0
@@ -157,7 +157,7 @@ Function InstallProgress
    nsSkinEngine::NSISFindControl "InstallTab_InstallBtn"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have InstallTab_InstallBtn button"
+    nsSkinEngine::NSISMessageBox ""  "Do not have InstallTab_InstallBtn button"
    ${Else}
     GetFunctionAddress $0 InstallPageFunc    
         nsSkinEngine::NSISOnControlBindNSISScript "InstallTab_InstallBtn"  $0
@@ -166,7 +166,7 @@ Function InstallProgress
    nsSkinEngine::NSISFindControl "CompleteTab_CompleteBtn"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have CompleteTab_CompleteBtn button"
+    nsSkinEngine::NSISMessageBox ""  "Do not have CompleteTab_CompleteBtn button"
    ${Else}
     GetFunctionAddress $0 OnCompleteBtnFunc    
         nsSkinEngine::NSISOnControlBindNSISScript "CompleteTab_CompleteBtn"  $0
@@ -240,7 +240,7 @@ Function FreshInstallDataStatusFunc
    nsSkinEngine::NSISFindControl "InstallTab_FreeSpace"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have InstallTab_FreeSpace"
+    nsSkinEngine::NSISMessageBox ""  "Do not have InstallTab_FreeSpace"
    ${Else}
     nsSkinEngine::NSISSetControlData "InstallTab_FreeSpace"  $FreeSpaceSize  "text"
    ${EndIf}
@@ -256,7 +256,7 @@ Function OnTextChangeFunc
    ; 改变可用磁盘空间大小
    nsSkinEngine::NSISGetControlData InstallTab_InstallFilePath "text"
    Pop $0
-   ;MessageBox MB_OK $0
+   ;nsSkinEngine::NSISMessageBox ""  $0
    StrCpy $INSTDIR $0
 
    ;重新获取磁盘空间
@@ -278,7 +278,7 @@ Function OnInstallPathBrownBtnFunc
       nsSkinEngine::NSISFindControl "InstallTab_InstallFilePath"
       Pop $0
       ${If} $0 == "-1"
-     MessageBox MB_OK "Do not have Wizard_InstallPathBtn4Page2 button"
+     nsSkinEngine::NSISMessageBox ""  "Do not have Wizard_InstallPathBtn4Page2 button"
       ${Else}
      ;nsSkinEngine::SetText2Control "InstallTab_InstallFilePath"  $installPath
      StrCpy $installPath $INSTDIR
@@ -298,7 +298,7 @@ Function InstallPageFunc
     nsSkinEngine::NSISFindControl "InstallProgressBar"
       Pop $0
       ${If} $0 == "-1"
-     MessageBox MB_OK "Do not have InstallProgressBar"
+     nsSkinEngine::NSISMessageBox ""  "Do not have InstallProgressBar"
       ${Else}
      nsSkinEngine::NSISSetControlData "InstallProgressBar"  "0"  "ProgressInt"
      nsSkinEngine::NSISSetControlData "progressText"  "0%"  "text"
@@ -310,7 +310,7 @@ Function InstallShow
      nsSkinEngine::NSISFindControl "InstallProgressBar"
       Pop $0
       ${If} $0 == "-1"
-     MessageBox MB_OK "Do not have InstallProgressBar"
+     nsSkinEngine::NSISMessageBox ""  "Do not have InstallProgressBar"
       ${Else}
      nsSkinEngine::NSISBindingProgress "InstallProgressBar" "progressText"
 	 ${EndIf}
@@ -376,7 +376,7 @@ Function un.onInit
   System::Call 'kernel32::CreateMutexA(i 0, i 0, t "BoltUnInstall") i .r1 ?e'
   Pop $R0
   StrCmp $R0 0 +3
-    MessageBox MB_OK|MB_ICONEXCLAMATION "有一个 WPS Mail 安装向导已经运行！"
+    nsSkinEngine::NSISMessageBox "" "有一个 WPS Mail 安装向导已经运行！"
     Abort
 
   SetOutPath "${UNINSTALL_DIR}"
@@ -396,7 +396,7 @@ Function un.UninstallProgress
    nsSkinEngine::NSISFindControl "sysCloseBtn"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have sysCloseBtn"
+    nsSkinEngine::NSISMessageBox ""  "Do not have sysCloseBtn"
    ${Else}
     GetFunctionAddress $0 un.OnUnInstallCancelFunc
     nsSkinEngine::NSISOnControlBindNSISScript "sysCloseBtn" $0
@@ -406,7 +406,7 @@ Function un.UninstallProgress
    nsSkinEngine::NSISFindControl "cancelUninstallBtn"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have cancelUninstallBtn"
+    nsSkinEngine::NSISMessageBox ""  "Do not have cancelUninstallBtn"
    ${Else}
     GetFunctionAddress $0 un.OnUnInstallCancelFunc
     nsSkinEngine::NSISOnControlBindNSISScript "cancelUninstallBtn" $0
@@ -416,7 +416,7 @@ Function un.UninstallProgress
    nsSkinEngine::NSISFindControl "contactbtn"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have contactbtn"
+    nsSkinEngine::NSISMessageBox ""  "Do not have contactbtn"
    ${Else}
     GetFunctionAddress $0 un.contactUs
     nsSkinEngine::NSISOnControlBindNSISScript "contactbtn" $0
@@ -426,7 +426,7 @@ Function un.UninstallProgress
    nsSkinEngine::NSISFindControl "okUninstallBtn"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have okUninstallBtn"
+    nsSkinEngine::NSISMessageBox ""  "Do not have okUninstallBtn"
    ${Else}
     GetFunctionAddress $0 un.UnInstallPageFunc
     nsSkinEngine::NSISOnControlBindNSISScript "okUninstallBtn" $0
@@ -436,7 +436,7 @@ Function un.UninstallProgress
    nsSkinEngine::NSISFindControl "completeBtn"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have completeBtn"
+    nsSkinEngine::NSISMessageBox ""  "Do not have completeBtn"
    ${Else}
     GetFunctionAddress $0 un.OnCompleteBtnFunc
     nsSkinEngine::NSISOnControlBindNSISScript "completeBtn" $0
@@ -446,7 +446,7 @@ Function un.UninstallProgress
    nsSkinEngine::NSISFindControl "question1btn"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have question1btn"
+    nsSkinEngine::NSISMessageBox ""  "Do not have question1btn"
    ${Else}
     GetFunctionAddress $0 un.question1
     nsSkinEngine::NSISOnControlBindNSISScript "question1btn" $0
@@ -456,7 +456,7 @@ Function un.UninstallProgress
    nsSkinEngine::NSISFindControl "question2btn"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have question2btn"
+    nsSkinEngine::NSISMessageBox ""  "Do not have question2btn"
    ${Else}
     GetFunctionAddress $0 un.question2
     nsSkinEngine::NSISOnControlBindNSISScript "question2btn" $0
@@ -466,7 +466,7 @@ Function un.UninstallProgress
    nsSkinEngine::NSISFindControl "question3btn"
    Pop $0
    ${If} $0 == "-1"
-    MessageBox MB_OK "Do not have question3btn"
+    nsSkinEngine::NSISMessageBox ""  "Do not have question3btn"
    ${Else}
     GetFunctionAddress $0 un.question3
     nsSkinEngine::NSISOnControlBindNSISScript "question3btn" $0
@@ -499,7 +499,7 @@ Function un.UninstallNow
      nsSkinEngine::NSISFindControl "UnInstallProgressBar"
       Pop $0
       ${If} $0 == "-1"
-     MessageBox MB_OK "Do not have UnInstallProgressBar"
+     nsSkinEngine::NSISMessageBox ""  "Do not have UnInstallProgressBar"
       ${Else}
      nsSkinEngine::NSISBindingProgress "UnInstallProgressBar" "progressText"
 	 ${EndIf}
