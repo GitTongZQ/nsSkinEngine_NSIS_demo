@@ -80,7 +80,7 @@ Page         instfiles  "" InstallShow
 UninstPage   custom     un.UninstallProgress
 UninstPage   instfiles	""	un.UninstallNow
 Function .onInit
-   nsSkinEngine::NSISInitSkinEngine /NOUNLOAD "${UNINSTALL_DIR}" "InstallPackages.xml" "WizardTab" "false" "115ä¯ÀÀÆ÷" "3546da8ed962e968ee8624549cbcae89" "app.ico" "true"
+   nsSkinEngine::NSISInitSkinEngine /NOUNLOAD "${UNINSTALL_DIR}" "InstallPackages.xml" "WizardTab" "false" "115ä¯ÀÀÆ÷" "8749afbd7acf4a170be5614d512d9522" "app.ico" "true"
    Pop $Dialog
    ;³õÊ¼»¯MessageBox´°¿Ú
    nsSkinEngine::NSISInitMessageBox "MessageBox.xml" "TitleLab" "TextLab" "CloseBtn" "YESBtn" "NOBtn"
@@ -442,7 +442,7 @@ Function un.onInit
 FunctionEnd
 
 Function un.UninstallProgress
-    nsSkinEngine::NSISInitSkinEngine /NOUNLOAD "${UNINSTALL_DIR}" "UninstallPackages.xml" "WizardTab" "false" "115ä¯ÀÀÆ÷" "3546da8ed962e968ee8624549cbcae89" "app.ico" "true"
+    nsSkinEngine::NSISInitSkinEngine /NOUNLOAD "${UNINSTALL_DIR}" "UninstallPackages.xml" "WizardTab" "false" "115ä¯ÀÀÆ÷" "8749afbd7acf4a170be5614d512d9522" "app.ico" "true"
    Pop $Dialog
    ;³õÊ¼»¯MessageBox´°¿Ú
    nsSkinEngine::NSISInitMessageBox "MessageBox.xml" "TitleLab" "TextLab" "CloseBtn" "YESBtn" "NOBtn"

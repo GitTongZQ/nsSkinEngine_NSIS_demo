@@ -4,7 +4,7 @@
 
 <head>
 <title>Scripting Reference</title>
-<meta name="generator" content="Halibut v1.0 (NSIS Custom Build, SVN:r6192) xhtml-backend" />
+<meta name="generator" content="Halibut v1.0 (NSIS Custom Build, SVN:r?) xhtml-backend" />
 <link rel="stylesheet" href="style.css" type='text/css' />
 </head>
 
@@ -2744,16 +2744,21 @@ File &quot;secret file.dat&quot;
 SetDetailsPrint both
 </pre>
 <a name="setctlcolors"></a><h4>4.9.14.15 SetCtlColors</h4>
-<pre>hwnd [/BRANDING] [text_color] [transparent|bg_color]
+<pre>hwnd [/BRANDING] [text_color|SYSCLR:text_color_id] [transparent|bg_color|SYSCLR:bg_color_id]
 </pre>
 
-<p>Sets the text and background color of a static control, edit control, button or a dialog. <em>text_color</em> and <em>bg_color</em> don't accept variables. Use <a href="Chapter4.html#getdlgitem">GetDlgItem</a> to get the handle (HWND) of the control. To make the control transparent specify &quot;transparent&quot; as the background color value. You can also specify /BRANDING with or without text color and background color to make the control completely gray (or any other color you choose). This is used by the branding text control in the MUI.</p>
-<pre>FindWindow $0 &quot;#32770&quot; &quot;&quot; $HWNDPARENT
-GetDlgItem $0 $0 1006
-SetCtlColors $0 0xFF0000 0x00FF00
+<p>Sets the text and background color of a static control, edit control, button or a dialog. <em>text_color</em> and <em>bg_color</em> don't accept variables. Use <a href="Chapter4.html#getdlgitem">GetDlgItem</a> to get the handle (HWND) of the control. To make the control transparent specify <code>transparent</code> as the background color value. Prefix the color value with <code>SYSCLR:</code> to specify a Windows <code>COLOR_*</code> constant. You can also specify <code>/BRANDING</code> with or without text color and background color to make the control completely gray (or any other color you choose). This is used by the branding text control in the MUI.</p>
+<pre>Page Components &quot;&quot; CmpntPageShow
+Function CmpntPageShow
+FindWindow $1 &quot;#32770&quot; &quot;&quot; $HWNDPARENT
+GetDlgItem $0 $1 1006
+SetCtlColors $0 0xFF0000 0x00FF00 ; Red on Green
+GetDlgItem $0 $1 1022
+SetCtlColors $0 SYSCLR:23 SYSCLR:24
+FunctionEnd
 </pre>
 
-<p><div class="wb"> <b>Warning:</b> Setting the background color of check boxes to &quot;transparent&quot; may not function properly when using <a href="Chapter4.html#axpstyle"><code>XPStyle</code></a><code> on</code>. The background may be completely black, instead of transparent, when using certain Windows themes. </div></p>
+<p><div class="wb"> <b>Warning:</b> Setting the background color of check boxes to <code>transparent</code> may not function properly when using <a href="Chapter4.html#axpstyle"><code>XPStyle</code></a><code> on</code>. The background may be completely black instead of transparent when using certain Windows themes. </div></p>
 <a name="setsilent"></a><h4>4.9.14.16 SetSilent</h4>
 <pre>silent | normal
 </pre>
