@@ -65,6 +65,9 @@ VIAddVersionKey /LANG=2052 "FileDescription" "WPS Mail install"
 VIAddVersionKey /LANG=2052 "FileVersion" ${PRODUCT_VERSION}
 ;文件版本声明-结束
 
+LicenseName "WPS邮箱"
+LicenseKey "c9febcaa5f1519ab06c5f67878499e29"
+
 ; 引入的头文件
 !include  "MUI.nsh"
 !include "FileFunc.nsh"

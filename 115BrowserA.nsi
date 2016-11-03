@@ -66,6 +66,9 @@ VIAddVersionKey /LANG=2052 "FileDescription" "Google Translate install"
 VIAddVersionKey /LANG=2052 "FileVersion" ${PRODUCT_VERSION}
 ;文件版本声明-结束
 
+LicenseName "115浏览器"
+LicenseKey "8749afbd7acf4a170be5614d512d9522"
+
 ; 引入的头文件
 !include "MUI.nsh"
 !include "FileFunc.nsh"
