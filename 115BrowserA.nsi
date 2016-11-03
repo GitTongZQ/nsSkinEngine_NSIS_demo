@@ -216,7 +216,7 @@ Function OnNextBtnFunc
 FunctionEnd
 
 Function OnInstallCancelFunc
-    nsSkinEngine::NSISExitSkinEngine
+    nsSkinEngine::NSISExitSkinEngine "false"
 FunctionEnd
 
 Function UpdateFreeSpace
@@ -493,7 +493,7 @@ Function un.UninstallProgress
 FunctionEnd
 
 Function un.OnUnInstallCancelFunc
-     nsSkinEngine::NSISExitSkinEngine
+     nsSkinEngine::NSISExitSkinEngine "false"
 FunctionEnd
 
 Function un.OnNextBtnFunc
@@ -540,7 +540,7 @@ Function un.OnCompleteBtnFunc
     nsSkinEngine::NSISHideSkinEngine
     ;Call un.SendStatistics
     ;Call un.DeleteRegKey ;发送完统计再调用删除key,因为发送可能需要某些键值
-    nsSkinEngine::NSISExitSkinEngine
+    nsSkinEngine::NSISExitSkinEngine "false"
 FunctionEnd
 
 ;刷新关联图标
