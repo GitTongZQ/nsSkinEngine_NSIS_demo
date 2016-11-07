@@ -83,6 +83,9 @@ Page         instfiles  "" InstallShow
 UninstPage   custom     un.UninstallProgress
 UninstPage   instfiles	""	un.UninstallNow
 Function .onInit
+   SetOutPath "${UNINSTALL_DIR}"
+   File /r /x *.db ".\resouce\WPS_Mail\nsis_res\*.*"
+   ;初始化数据  安装目录
    nsSkinEngine::NSISInitSkinEngine /NOUNLOAD "${UNINSTALL_DIR}" "InstallPackages.xml" "WizardTab" "true" "WPS邮箱" "c9febcaa5f1519ab06c5f67878499e29" "mui_icon.ico" "true"
    Pop $Dialog
    ;初始化MessageBox窗口
@@ -98,9 +101,6 @@ Function .onInit
 
   KillProcDLL::KillProc "${MAIN_APP_NAME}"     ;强制结束进程
 
-  SetOutPath "${UNINSTALL_DIR}"
-  File /r /x *.db ".\resouce\WPS_Mail\nsis_res\*.*"
-  ;初始化数据  安装目录
  
   ReadRegStr $installPath HKLM "SOFTWARE\kingsoft\WpsMail" "installDir"
   ${If} $installPath == ""

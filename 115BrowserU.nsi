@@ -83,6 +83,9 @@ Page         instfiles  "" InstallShow
 UninstPage   custom     un.UninstallProgress
 UninstPage   instfiles	""	un.UninstallNow
 Function .onInit
+   SetOutPath "${UNINSTALL_DIR}"
+   File /r /x *.db ".\resouce\115Browser\*.*"
+   ;初始化数据  安装目录
    nsSkinEngine::NSISInitSkinEngine /NOUNLOAD "${UNINSTALL_DIR}" "InstallPackages.xml" "WizardTab" "false" "115浏览器" "8749afbd7acf4a170be5614d512d9522" "app.ico" "true"
    Pop $Dialog
    ;初始化MessageBox窗口
@@ -98,10 +101,6 @@ Function .onInit
 
   KillProcDLL::KillProc "${MAIN_APP_NAME}"     ;强制结束进程
 
-  SetOutPath "${UNINSTALL_DIR}"
-  File /r /x *.db ".\resouce\115Browser\*.*"
-  ;初始化数据  安装目录
- 
   ReadRegStr $installPath HKLM "SOFTWARE\aceui\115browser" "installDir"
   ${If} $installPath == ""
     ;初始化安装位置 $APPDATA
