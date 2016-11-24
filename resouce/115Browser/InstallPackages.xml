@@ -84,7 +84,7 @@
 			</VerticalLayout>
 		</VerticalLayout>
 		<VerticalLayout padding="10,10,10,0" bkimage="1-1.png">
-			<RichEdit name="acceptInfo" inset="10,10,10,10" bkimage="file='license_bg.png' corner='10,10,10,10'" hinttext="普通" vscrollbar="true" textcolor="#00999999" padding="10,10,10,10" readonly="true" />
+			<RichEdit name="acceptInfo" inset="10,10,10,10" bkimage="file='license_bg.png' corner='10,10,10,10'" hinttext="普通" vscrollbar="true" textcolor="#00999999" padding="10,10,10,10" readonly="true" vscrollbar="true"/>
 			<HorizontalLayout height="32" padding="0,0,0,10">
 				<Control />
 				<Button name="okAcceptBtn" text="确定" textcolor="#FFFFFFFF" width="112" height="32" normalimage="NormalBtnNormal.png" hotimage="NormalBtnHover.png" pushedimage="NormalBtnPushed.png" />
