@@ -305,7 +305,7 @@ Function InstallPageFunc
       ${Else}
      nsSkinEngine::NSISSetControlData "InstallProgressBar"  "0"  "ProgressInt"
      nsSkinEngine::NSISSetControlData "progressText"  "0%"  "text"
-     nsSkinEngine::NSISStartInstall
+     nsSkinEngine::NSISStartInstall "true"
      ${EndIf} 
 FunctionEnd
 
@@ -495,7 +495,7 @@ Function un.UnInstallPageFunc
     nsSkinEngine::NSISSetControlData "okUninstallBtn2"  "false"  "enable"
     nsSkinEngine::NSISSetControlData "cancelUninstallBtn2"  "false"  "enable"
 	nsSkinEngine::NSISSetControlData "progressTip"  "’˝‘⁄…æ≥˝WPS” œ‰"  "text"
-    nsSkinEngine::NSISStartUnInstall
+    nsSkinEngine::NSISStartUnInstall "true"
 FunctionEnd
 
 Function un.UninstallNow
