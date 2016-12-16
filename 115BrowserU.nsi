@@ -308,10 +308,10 @@ Function OnCheckChanged
     nsSkinEngine::NSISGetControlData "CustomOptionsCheckBox" "Checked" ;
     Pop $0
     ${If} $0 == "1"
-	nsSkinEngine::NSISResize "445" "608"
+	nsSkinEngine::NSISResize "457" "608"
 	nsSkinEngine::NSISSetControlData "customVer"  "true"  "visible"
 	${Else}
-	nsSkinEngine::NSISResize "445" "462"
+	nsSkinEngine::NSISResize "457" "462"
 	nsSkinEngine::NSISSetControlData "customVer"  "false"  "visible"
 	${EndIf}
 FunctionEnd
@@ -337,7 +337,7 @@ FunctionEnd
 
 Function InstallPageFunc
     nsSkinEngine::NSISSetControlData "InstallTab_sysCloseBtn"  "false"  "enable"
-	nsSkinEngine::NSISResize "445" "462"
+	nsSkinEngine::NSISResize "457" "462"
 	nsSkinEngine::NSISSetControlData "customVer"  "false"  "visible"
     ;设置进度条
     nsSkinEngine::NSISSetControlData "CompleteTab_RunAppCheckBox"  "true" "Checked" ;默认勾选运行程序

@@ -13,7 +13,7 @@
 		<VerticalLayout>
 			<VerticalLayout height="300" bkimage="BG_install_uninstall.png">
 				<HorizontalLayout height="24">
-					<Button name="InstallTab_sysCloseBtn" float="true" pos="433,0,0,0" width="24" height="24" normalimage="popup_button_close_normal.png" hotimage="popup_button_close_hover.png" pushedimage="popup_button_close_pressed.png" /> 
+					<Button name="InstallTab_sysCloseBtn" float="true" pos="434,0,0,0" width="24" height="24" normalimage="popup_button_close_normal.png" hotimage="popup_button_close_hover.png" pushedimage="popup_button_close_pressed.png" /> 
 				</HorizontalLayout>
 				<Control height="164" />
 					<WebBrowser name="pop_ad_browser" float="false" clsid="{8856F961-340A-11D0-A96B-00C04FD705A2}" delaycreate="false" />
@@ -71,7 +71,7 @@
 					</HorizontalLayout>
 					<Control />
 				</VerticalLayout>
-				<VerticalLayout height="40" padding="0,0,0,0">
+				<VerticalLayout height="40" padding="0,0,0,5">
 					<HorizontalLayout>
 						<CheckBox name="deskShortCheckBox" text="添加到桌面快捷方式" textcolor="#FF333333" width="250"/>
 						<CheckBox name="2345CheckBox" text="将2345设为主页" textcolor="#FF333333" width="120"/>
