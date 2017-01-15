@@ -9,26 +9,16 @@
 !packhdr temp.dat 'cmd /c Copy /b temp.dat /b +blank&&del blank'
 
 ;定义变量
-Var Dialog
-Var MessageBoxHandle
-Var installPath
-Var FreeSpaceSize
-
-; 安装程序初始定义常量
-!define PRODUCT_VERSION "2016.01.11.000"
-!define MAIN_APP_NAME "GoogleTranslate.exe"
-!define PRODUCT_NAME "Google Translate"
-!define PRODUCT_NAME_EN "Google Translate"
-!define PRODUCT_PUBLISHER "aceui"
-!define PRODUCT_WEB_SITE "http://www.aceui.cn"
-!define PRODUCT_2345WEB_SITE "http://www.2345.com/?k652511569"
-!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${MAIN_APP_NAME}"
-!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
-!define PRODUCT_AUTORUN_KEY "Software\Microsoft\Windows\CurrentVersion\Run"
-!define PRODUCT_UNINST_ROOT_KEY "HKLM"
+Var IsUpdateSelf
+Var IsUpdateOther
+!define PRODUCT_VERSION "2016.01.10.000"
 !define MUI_ICON "resouce\115Browser\app.ico"
 !define MUI_UNICON "resouce\115Browser\app.ico"
 !define UNINSTALL_DIR "$TEMP\ACEUI\aceuiStep"
+
+!define UPDATE_TEMP_NAME "UpdateSelf.exe"
+!define UPDATE_NAME "Update.exe"
+
 ;刷新关联图标
 !define SHCNE_ASSOCCHANGED 0x08000000
 !define SHCNF_IDLIST 0
@@ -50,7 +40,7 @@ Unicode true
 ; 是否允许安装在根目录下
 AllowRootDirInstall false
 Name "${PRODUCT_NAME}"
-OutFile "output\testUpdate.exe"
+OutFile "output\Update.exe"
 InstallDir "$PROGRAMFILES\Google Translate"
 InstallDirRegKey HKLM "${PRODUCT_UNINST_KEY}" "UninstallString"
 ;Request application privileges for Windows Vista
@@ -77,16 +67,41 @@ LicenseKey "8749afbd7acf4a170be5614d512d9522"
 !insertmacro MUI_LANGUAGE "SimpChinese"
 ;初始化数据
 
-
 Function .onInit
-   nsAutoUpdate::SetAppServerSettings "1" "65B70DE7540C42759156483165E35215" "http://update.aceui.cn/api/Public/Update/?"
-   nsAutoUpdate::InitLog "false"
-   nsAutoUpdate::SetAppSettings "$EXEFILE" "$EXEDIR"
-   GetFunctionAddress $0 UpdateEventChangeCallback 
-   nsAutoUpdate::SetUpdateEventChangeCallback $0
-   GetFunctionAddress $0 ProgressChangeCallback 
-   nsAutoUpdate::SetProgressChangeCallback $0
-   nsAutoUpdate::RequestUpdateInfo
+    MessageBox MB_OK "CC"
+    ${GetParameters} $R0 # 获得命令行
+    ClearErrors
+    ${GetOptions} $R0 "/UpdateSelf" $R1 # 在命令行里查找是否存在/T选项
+    IfErrors 0 +3
+    StrCpy $IsUpdateSelf "0"
+    Goto +3
+    StrCpy $IsUpdateSelf "1"
+    KillProcDLL::KillProc "${UPDATE_NAME}"
+    ClearErrors
+    ${GetParameters} $R0 # 获得命令行
+    ${GetOptions} $R0 "/UpdateOther" $R1 # 在命令行里查找是否存在/T选项
+    IfErrors 0 +3
+    StrCpy $IsUpdateOther "0"
+    Goto +2
+    StrCpy $IsUpdateOther "1"
+    MessageBox MB_OK "$IsUpdateSelf $IsUpdateOther"
+    nsAutoUpdate::SetAppServerSettings "1" "65B70DE7540C42759156483165E35215" "http://update.aceui.cn/api/Public/Update/?"
+    IntCmp $IsUpdateSelf 0 +3
+    nsAutoUpdate::InitLog "false"
+    Goto +2
+    nsAutoUpdate::InitLog "true"
+    nsAutoUpdate::SetAppSettings "${UPDATE_NAME}" "$EXEDIR"
+    GetFunctionAddress $0 UpdateEventChangeCallback 
+    nsAutoUpdate::SetUpdateEventChangeCallback $0
+    GetFunctionAddress $0 ProgressChangeCallback 
+    nsAutoUpdate::SetProgressChangeCallback $0
+    
+    IntCmp $IsUpdateOther 1 +2
+    nsAutoUpdate::RequestUpdateInfo
+    IntCmp $IsUpdateSelf 0 +2
+    nsAutoUpdate::ReplaceUzipDirFileToCurrentDir "${UPDATE_NAME}" "${UPDATE_NAME}"
+    IntCmp $IsUpdateOther 0 +2
+    nsAutoUpdate::ReplaceOtherFiles
 FunctionEnd
 
 Section "xxxxx"
@@ -122,6 +137,15 @@ Function UpdateEventChangeCallback
     nsAutoUpdate::UpdateInfo
     Pop $R0
     DetailPrint '升级信息:$R0'
+    nsAutoUpdate::IsBackstage
+    Pop $R0
+    DetailPrint '是否后台:$R0'
+    nsAutoUpdate::IsManual
+    Pop $R0
+    DetailPrint '是否手动:$R0'
+    nsAutoUpdate::IsForced
+    Pop $R0
+    DetailPrint '是否强制:$R0'
     DetailPrint '开始下载filelist.ini'
     nsAutoUpdate::DownloadUpdateFileListIni
     ${ElseIf} $R0 == '6'
@@ -151,15 +175,16 @@ Function UpdateEventChangeCallback
     DetailPrint '替换文件成功'
     ${ElseIf} $R0 == '17'
     DetailPrint '替换自身'
-    ${ElseIf} $R0 == '18'
-    DetailPrint '替换自身成功'
+    nsAutoUpdate::ReplaceUzipDirFileToCurrentDir "${UPDATE_NAME}" "${UPDATE_TEMP_NAME}"
+    Pop $R1
+    IntCmp $R1 0 +4
+    DetailPrint '运行${UPDATE_TEMP_NAME}'
+    Exec '"$EXEDIR\${UPDATE_TEMP_NAME}" /UpdateSelf /UpdateOther'
+    Goto +2
+    DetailPrint '替换${UPDATE_TEMP_NAME}失败'
     ${ElseIf} $R0 == '19'
-    DetailPrint '开始更新版本'
-    ${ElseIf} $R0 == '20'
-    DetailPrint '更新版本成功'
-    ${ElseIf} $R0 == '21'
     DetailPrint '升级成功'
-    ${ElseIf} $R0 > '21' ;EVENT_SOME_ERROR
+    ${ElseIf} $R0 > '19' ;EVENT_SOME_ERROR
     DetailPrint "出错了 代号：$R0"
     ${EndIf}
 FunctionEnd
