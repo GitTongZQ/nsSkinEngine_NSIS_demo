@@ -44,7 +44,7 @@ OutFile "output\Update.exe"
 InstallDir "$PROGRAMFILES\Google Translate"
 InstallDirRegKey HKLM "${PRODUCT_UNINST_KEY}" "UninstallString"
 ;Request application privileges for Windows Vista
-RequestExecutionLevel admin
+RequestExecutionLevel user
 ;文件版本声明-开始
 VIProductVersion ${PRODUCT_VERSION}
 VIAddVersionKey /LANG=2052 "ProductName" "Google Translate"
@@ -177,14 +177,15 @@ Function UpdateEventChangeCallback
     DetailPrint '替换自身'
     nsAutoUpdate::ReplaceUzipDirFileToCurrentDir "${UPDATE_NAME}" "${UPDATE_TEMP_NAME}"
     Pop $R1
-    IntCmp $R1 0 +4
+    IntCmp $R1 0 +5
     DetailPrint '运行${UPDATE_TEMP_NAME}'
     Exec '"$EXEDIR\${UPDATE_TEMP_NAME}" /UpdateSelf /UpdateOther'
+    ;nsAutoUpdate::RunAsProcessByFilePath "$EXEDIR\${UPDATE_TEMP_NAME}" "/UpdateSelf /UpdateOther"
     Goto +2
     DetailPrint '替换${UPDATE_TEMP_NAME}失败'
-    ${ElseIf} $R0 == '19'
+    ${ElseIf} $R0 == '18'
     DetailPrint '升级成功'
-    ${ElseIf} $R0 > '19' ;EVENT_SOME_ERROR
+    ${ElseIf} $R0 > '18' ;EVENT_SOME_ERROR
     DetailPrint "出错了 代号：$R0"
     ${EndIf}
 FunctionEnd
