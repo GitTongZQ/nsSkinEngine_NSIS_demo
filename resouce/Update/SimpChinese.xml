@@ -1,0 +1,80 @@
+<Window size="500,350" sizebox="0,0,0,0" caption="0,0,0,32">
+	<Font name="微软雅黑" size="12" bold="false" italic="false" default="true"/>
+    <Font name="微软雅黑" size="14" bold="false" italic="false" />
+    <Font name="微软雅黑" size="16" bold="false" italic="false" />
+    <Font name="微软雅黑" size="28" bold="false" italic="false" />
+	<Default name="VScrollBar" value="button1normalimage=&quot;file='scrollbar.bmp' source='0,90,16,106' mask='#FFFF00FF'&quot; button1hotimage=&quot;file='scrollbar.bmp' source='18,90,34,106' mask='#FFFF00FF'&quot; button1pushedimage=&quot;file='scrollbar.bmp' source='36,90,52,106' mask='#FFFF00FF'&quot; button1disabledimage=&quot;file='scrollbar.bmp' source='54,90,70,106' mask='#FFFF00FF'&quot; button2normalimage=&quot;file='scrollbar.bmp' source='0,108,16,124' mask='#FFFF00FF'&quot; button2hotimage=&quot;file='scrollbar.bmp' source='18,108,34,124' mask='#FFFF00FF'&quot; button2pushedimage=&quot;file='scrollbar.bmp' source='36,108,52,124' mask='#FFFF00FF'&quot; button2disabledimage=&quot;file='scrollbar.bmp' source='54,108,70,124' mask='#FFFF00FF'&quot; thumbnormalimage=&quot;file='scrollbar.bmp' source='0,126,16,142' corner='2,2,2,2' mask='#FFFF00FF'&quot; thumbhotimage=&quot;file='scrollbar.bmp' source='18,126,34,142' corner='2,2,2,2' mask='#FFFF00FF'&quot; thumbpushedimage=&quot;file='scrollbar.bmp' source='36,126,52,142' corner='2,2,2,2' mask='#FFFF00FF'&quot; thumbdisabledimage=&quot;file='scrollbar.bmp' source='54,126,70,142' corner='2,2,2,2' mask='#FFFF00FF'&quot; railnormalimage=&quot;file='scrollbar.bmp' source='0,144,16,160' corner='2,2,2,2' mask='#FFFF00FF'&quot; railhotimage=&quot;file='scrollbar.bmp' source='18,144,34,160' corner='2,2,2,2' mask='#FFFF00FF'&quot; railpushedimage=&quot;file='scrollbar.bmp' source='36,144,52,160' corner='2,2,2,2' mask='#FFFF00FF'&quot; raildisabledimage=&quot;file='scrollbar.bmp' source='54,144,70,160' corner='2,2,2,2' mask='#FFFF00FF'&quot; bknormalimage=&quot;file='scrollbar.bmp' source='0,162,16,178' corner='2,2,2,2' mask='#FFFF00FF'&quot; bkhotimage=&quot;file='scrollbar.bmp' source='18,162,34,178' corner='2,2,2,2' mask='#FFFF00FF'&quot; bkpushedimage=&quot;file='scrollbar.bmp' source='36,162,52,178' corner='2,2,2,2' mask='#FFFF00FF'&quot; bkdisabledimage=&quot;file='scrollbar.bmp' source='54,162,70,178' corner='2,2,2,2' mask='#FFFF00FF'&quot; " />
+	<Default name="HScrollBar" value="button1normalimage=&quot;file='scrollbar.bmp' source='0,0,16,16' mask='#FFFF00FF'&quot; button1hotimage=&quot;file='scrollbar.bmp' source='18,0,34,16' mask='#FFFF00FF'&quot; button1pushedimage=&quot;file='scrollbar.bmp' source='36,0,52,16' mask='#FFFF00FF'&quot; button1disabledimage=&quot;file='scrollbar.bmp' source='54,0,70,16' mask='#FFFF00FF'&quot; button2normalimage=&quot;file='scrollbar.bmp' source='0,18,16,34' mask='#FFFF00FF'&quot; button2hotimage=&quot;file='scrollbar.bmp' source='18,18,34,34' mask='#FFFF00FF'&quot; button2pushedimage=&quot;file='scrollbar.bmp' source='36,18,52,34' mask='#FFFF00FF'&quot; button2disabledimage=&quot;file='scrollbar.bmp' source='54,18,70,34' mask='#FFFF00FF'&quot; thumbnormalimage=&quot;file='scrollbar.bmp' source='0,36,16,52' corner='2,2,2,2' mask='#FFFF00FF'&quot; thumbhotimage=&quot;file='scrollbar.bmp' source='18,36,34,52' corner='2,2,2,2' mask='#FFFF00FF'&quot; thumbpushedimage=&quot;file='scrollbar.bmp' source='36,36,52,52' corner='2,2,2,2' mask='#FFFF00FF'&quot; thumbdisabledimage=&quot;file='scrollbar.bmp' source='54,36,70,52' corner='2,2,2,2' mask='#FFFF00FF'&quot; railnormalimage=&quot;file='scrollbar.bmp' source='0,54,16,70' corner='2,2,2,2' mask='#FFFF00FF'&quot; railhotimage=&quot;file='scrollbar.bmp' source='18,54,34,70' corner='2,2,2,2' mask='#FFFF00FF'&quot; railpushedimage=&quot;file='scrollbar.bmp' source='36,54,52,70' corner='2,2,2,2' mask='#FFFF00FF'&quot; raildisabledimage=&quot;file='scrollbar.bmp' source='54,54,70,70' corner='2,2,2,2' mask='#FFFF00FF'&quot; bknormalimage=&quot;file='scrollbar.bmp' source='0,72,16,88' corner='2,2,2,2' mask='#FFFF00FF'&quot; bkhotimage=&quot;file='scrollbar.bmp' source='18,72,34,88' corner='2,2,2,2' mask='#FFFF00FF'&quot; bkpushedimage=&quot;file='scrollbar.bmp' source='36,72,52,88' corner='2,2,2,2' mask='#FFFF00FF'&quot; bkdisabledimage=&quot;file='scrollbar.bmp' source='54,72,70,88' corner='2,2,2,2' mask='#FFFF00FF'&quot; " />
+	<VerticalLayout name="VerticalLayoutUI1" float="false" bkimage="res='window_big.png' corner='30,30,30,30'">
+		<HorizontalLayout float="false" height="32">
+			<Label text="检查更新" textcolor="#FF333333" padding="220,0,0,0" font="1"/>
+			<HorizontalLayout name="sysBtnH" float="true" pos="451,8,0,0" height="32" width="40">
+				<Button name="minbtn" textcolor="#00000000" normalimage="res='icon_min_nor.png' corner='4,4,4,4'" hotimage="res='icon_min_hover.png' corner='4,4,4,4'" pushedimage="res='icon_min_pressed.png' corner='4,4,4,4'" width="16" height="16"/>
+				<Button name="closebtn" textcolor="#00000000" normalimage="res='btn_closed_normal.png' corner='4,4,4,4'" hotimage="res='btn_closed_hover.png' corner='4,4,4,4'" pushedimage="res='btn_closed_pressed.png' corner='4,4,4,4'" disabledimage="res='btn_closed_disabled.png' corner='4,4,4,4'" padding="8,0,0,0" width="16" height="16"/>
+			</HorizontalLayout>
+		</HorizontalLayout>
+		<TabLayout name="WizardTab" padding="16,0,8,10">
+			<VerticalLayout>
+				<Control />
+				<Label text="正在检测升级信息..." align="center" textcolor="#FF666666" padding="0,0,0,0" font="3"/>
+				<Label name="currentVersionTextStep1" text="当前版本：" textcolor="#FF666666" align="center" padding="0,0,0,0" font="2"/>
+				<Control />
+			</VerticalLayout>
+			<VerticalLayout>
+				<Label text="检测到可用更新" textcolor="#FF666666" padding="0,0,0,0" font="3"/>
+				<Label name="newVersionTextStep2" text="可用版本：" textcolor="#FF666666" padding="0,0,0,0" font="2"/>
+				<RichEdit name="updateInfo" inset="0,0,0,0" width="476" height="290" text="正在获取，请稍候" hinttext="普通" vscrollbar="true" textcolor="#00999999" padding="0,0,0,8" readonly="true" menu="true"/>
+			</VerticalLayout>
+			<VerticalLayout>
+				<Label text="正在为您更新" textcolor="#FF666666" padding="0,0,0,0" font="3"/>
+				<Label name="newVersionTextStep3" text="可用版本：" textcolor="#FF666666" padding="0,0,0,0" font="2"/>
+				<Label name="progressText" text="0%" padding="0,20,0,0" textcolor="#FF1DAB7B" font="2"/>
+				<Progress name="InstallProgressBar" height="3" bkimage="file='updata_loading_bg.png' corner='3,0,7,0'" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" foreimage="file='updata_loading.png' corner='3,0,70,0'" min="0" max="100" value="0" hor="true" />
+				<Label name="progressTip" text="正在下载文件信息" textcolor="#FF999999"/>
+				<Control />
+			</VerticalLayout>
+			<VerticalLayout>
+				<Control />
+				<Label text="WPS邮箱更新已下载" align="center" textcolor="#FF666666" padding="0,0,0,0" font="3"/>
+				<Label text="WPS邮箱正在运行，是否立即关闭，进行替换升级" align="center" textcolor="#FF666666" padding="0,0,0,0" font="2"/>
+				<Control />
+			</VerticalLayout>
+			<VerticalLayout>
+				<Control />
+				<Label text="升级数据正在替换" align="center" textcolor="#FF666666" padding="0,0,0,0" font="3"/>
+				<Label text="请勿关闭，稍等升级完成" align="center" textcolor="#FF666666" padding="0,0,0,0" font="2"/>
+				<Control />
+			</VerticalLayout>
+			<VerticalLayout>
+				<Control />
+				<Label text="WPS邮箱已升级成功" align="center" textcolor="#FF666666" padding="0,0,0,0" font="3"/>
+				<Label name="currentVersionTextStep4" text="当前版本：" textcolor="#FF666666" align="center" padding="0,0,0,0" font="2"/>
+				<Control />
+			</VerticalLayout>
+			<VerticalLayout>
+				<Control />
+				<Label text="当前程序已是最新版本" align="center" textcolor="#FF666666" padding="0,0,0,0" font="3"/>
+				<Label name="currentVersionTextStep5" text="当前版本：" textcolor="#FF666666" align="center" padding="0,0,0,0" font="2"/>
+				<Control />
+			</VerticalLayout>
+			<VerticalLayout>
+				<Control />
+				<Label text="网络连接出错" align="center" textcolor="#FF666666" padding="0,0,0,0" font="3"/>
+				<Label text="请重试或者稍后重新检测升级" textcolor="#FF666666" align="center" padding="0,0,0,0" font="2"/>
+				<Control />
+			</VerticalLayout>
+			<VerticalLayout>
+				<Control />
+				<Label text="升级过程出错" align="center" textcolor="#FF666666" padding="0,0,0,0" font="3"/>
+				<Label text="请稍后重新检测升级，也可以联系QQ652511569" textcolor="#FF666666" align="center" padding="0,0,0,0" font="2"/>
+				<Control />
+			</VerticalLayout>
+		</TabLayout>
+		<HorizontalLayout name="HorizontalLayoutUI5" height="32" padding="0,0,10,10">
+			<Control />
+			<Button name="CancelBtn" text="以后再说" textcolor="#00333333" font="1" normalimage="res='btn_white_nor.png' corner='4,4,4,4'" hotimage="res='btn_white_hover.png' corner='4,4,4,4'" pushedimage="res='btn_white_pressed.png' corner='4,4,4,4'" disabledimage="res='btn_green_disabled.png' corner='4,4,4,4'" width="112"/>
+			<Control width="16"/>
+			<Button name="OkBtn" text="立即升级" textcolor="#00FFFFFF" font="1" normalimage="res='btn_green_nor.png' corner='4,4,4,4'" hotimage="res='btn_green_hover.png' corner='4,4,4,4'" pushedimage="res='btn_green_pressed.png' corner='4,4,4,4'" disabledimage="res='btn_white_disabled.png' corner='4,4,4,4'" width="112"/>
+		</HorizontalLayout>
+	</VerticalLayout>
+</Window>
