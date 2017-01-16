@@ -68,8 +68,8 @@ LicenseKey "8749afbd7acf4a170be5614d512d9522"
 ;初始化数据
 
 Function .onInit
-    MessageBox MB_OK "CC"
     ${GetParameters} $R0 # 获得命令行
+    MessageBox MB_OK "$R0"
     ClearErrors
     ${GetOptions} $R0 "/UpdateSelf" $R1 # 在命令行里查找是否存在/T选项
     IfErrors 0 +3
@@ -86,7 +86,7 @@ Function .onInit
     StrCpy $IsUpdateOther "1"
     MessageBox MB_OK "$IsUpdateSelf $IsUpdateOther"
     nsAutoUpdate::SetAppServerSettings "1" "65B70DE7540C42759156483165E35215" "http://update.aceui.cn/api/Public/Update/?"
-    IntCmp $IsUpdateSelf 0 +3
+    IntCmp $IsUpdateSelf 1 +3
     nsAutoUpdate::InitLog "false"
     Goto +2
     nsAutoUpdate::InitLog "true"
@@ -187,6 +187,10 @@ Function UpdateEventChangeCallback
     DetailPrint '升级成功'
     ${ElseIf} $R0 > '18' ;EVENT_SOME_ERROR
     DetailPrint "出错了 代号：$R0"
+    ${If} $R0 == '21'
+    nsAutoUpdate::RunAsProcessByFilePath "$EXEPATH" ""
+    Quit
+    ${EndIf}
     ${EndIf}
 FunctionEnd
 
