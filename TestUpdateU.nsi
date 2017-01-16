@@ -113,7 +113,7 @@ Function ProgressChangeCallback
     Pop $R1
     Pop $R2
     Pop $R3
-    DetailPrint '进度：$R1  下载明：$R2  是否完成：$R3'
+    DetailPrint '进度：$R1  下载文件名：$R2  是否完成：$R3'
 FunctionEnd
 
 Function UpdateEventChangeCallback
@@ -188,8 +188,10 @@ Function UpdateEventChangeCallback
     ${ElseIf} $R0 > '18' ;EVENT_SOME_ERROR
     DetailPrint "出错了 代号：$R0"
     ${If} $R0 == '21'
+    DetailPrint "需要提升权限"
     nsAutoUpdate::RunAsProcessByFilePath "$EXEPATH" ""
-    Quit
+    DetailPrint "退出"
+    Abort
     ${EndIf}
     ${EndIf}
 FunctionEnd
