@@ -199,7 +199,7 @@ Function InitUpdate
     ${AndIf} $IsUpdateSelf == 1
     nsSkinEngine::NSISShowLowerRight
     ${EndIf}
-    nsAutoUpdate::SetAppServerSettings "1" "65B70DE7540C42759156483165E35215" "http://update.aceui.cn/api/Public/Update/?"
+    nsAutoUpdate::SetAppServerSettings "1" "65B70DE7540C42759156483165E35215" "http://update.aceui.cn"
     ${If} $IsUpdateSelf == 0
     nsAutoUpdate::InitLog "false"
     ${Else}
