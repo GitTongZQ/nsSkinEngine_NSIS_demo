@@ -154,7 +154,7 @@ FunctionEnd
 Function InitUpdate
     nsSkinEngine::NSISKillTimer $varShowInstTimerId
     ${GetParameters} $varCurrentParameters # 获得命令行
-    MessageBox MB_OK "$varCurrentParameters"
+    ;MessageBox MB_OK "$varCurrentParameters"
     ClearErrors
     ${GetParameters} $R0 # 获得命令行
     ${GetOptions} $R0 "/Auto" $R1 # 在命令行里查找是否存在/T选项
@@ -332,7 +332,6 @@ Function UpdateEventChangeCallback
         ${If} $R1 == 1
         DetailPrint '运行${UPDATE_TEMP_NAME}'
         nsSkinEngine::NSISHideSkinEngine
-        MessageBox MB_OK "/UpdateSelf /UpdateOther $varCurrentParameters"
         Exec '"$EXEDIR\${UPDATE_TEMP_NAME}" /UpdateSelf /UpdateOther $varCurrentParameters'
         nsSkinEngine::NSISExitSkinEngine "false"
         ${Else}
