@@ -35,8 +35,8 @@
 			</VerticalLayout>
 			<VerticalLayout>
 				<Control />
-				<Label text="WPS邮箱更新已下载" align="center" textcolor="#FF666666" padding="0,0,0,0" font="3"/>
-				<Label text="WPS邮箱正在运行，是否立即关闭，进行替换升级" align="center" textcolor="#FF666666" padding="0,0,0,0" font="2"/>
+				<Label text="AceUI更新已下载" align="center" textcolor="#FF666666" padding="0,0,0,0" font="3"/>
+				<Label text="AceUI正在运行，是否立即关闭，进行替换升级" align="center" textcolor="#FF666666" padding="0,0,0,0" font="2"/>
 				<Control />
 			</VerticalLayout>
 			<VerticalLayout>
@@ -47,7 +47,7 @@
 			</VerticalLayout>
 			<VerticalLayout>
 				<Control />
-				<Label text="WPS邮箱已升级成功" align="center" textcolor="#FF666666" padding="0,0,0,0" font="3"/>
+				<Label text="AceUI已升级成功" align="center" textcolor="#FF666666" padding="0,0,0,0" font="3"/>
 				<Label name="currentVersionTextStep4" text="当前版本：" textcolor="#FF666666" align="center" padding="0,0,0,0" font="2"/>
 				<Control />
 			</VerticalLayout>

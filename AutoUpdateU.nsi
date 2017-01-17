@@ -24,14 +24,16 @@ Var IsBanDisturb
 
 Var varShowInstTimerId
 Var varCurrentStep
+Var varCurrentVersion
+Var varLocalVersion
+Var varCurrentParameters
 ; 安装程序初始定义常量
 !define PRODUCT_VERSION "2016.01.10.000"
-!define MAIN_APP_NAME "GoogleTranslate.exe"
-!define PRODUCT_NAME "Google Translate"
-!define PRODUCT_NAME_EN "Google Translate"
+!define MAIN_APP_NAME "notepad++.exe"
+!define PRODUCT_NAME "notepad++"
+!define PRODUCT_NAME_EN "notepad++"
 !define PRODUCT_PUBLISHER "aceui"
 !define PRODUCT_WEB_SITE "http://www.aceui.cn"
-!define PRODUCT_2345WEB_SITE "http://www.2345.com/?k652511569"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${MAIN_APP_NAME}"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_AUTORUN_KEY "Software\Microsoft\Windows\CurrentVersion\Run"
@@ -151,8 +153,8 @@ FunctionEnd
 
 Function InitUpdate
     nsSkinEngine::NSISKillTimer $varShowInstTimerId
-    ${GetParameters} $R0 # 获得命令行
-    MessageBox MB_OK "$R0"
+    ${GetParameters} $varCurrentParameters # 获得命令行
+    MessageBox MB_OK "$varCurrentParameters"
     ClearErrors
     ${GetParameters} $R0 # 获得命令行
     ${GetOptions} $R0 "/Auto" $R1 # 在命令行里查找是否存在/T选项
@@ -189,8 +191,13 @@ Function InitUpdate
     Goto +3
     StrCpy $IsUpdateOther "1"
     nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "4"
+    Call getLocalVersion
+    nsSkinEngine::NSISSetControlData "currentVersionTextStep1"  "当前版本：$varLocalVersion"  "text"
     ${If} $IsAuto == 0
     nsSkinEngine::NSISShowSkinEngine
+    ${ElseIf} $IsAuto == 1
+    ${AndIf} $IsUpdateSelf == 1
+    nsSkinEngine::NSISShowLowerRight
     ${EndIf}
     nsAutoUpdate::SetAppServerSettings "1" "65B70DE7540C42759156483165E35215" "http://update.aceui.cn/api/Public/Update/?"
     ${If} $IsUpdateSelf == 0
@@ -232,12 +239,18 @@ Function ReplaceOtherFiles
    nsAutoUpdate::ReplaceOtherFiles
 FunctionEnd
 
+Function getLocalVersion
+   StrCpy $varLocalVersion "2016.01.10.000"
+FunctionEnd
+
 Function ProgressChangeCallback
     Pop $R1
     Pop $R2
     Pop $R3
     nsSkinEngine::NSISSetControlData "progressText"  "$R1%"  "text"
     nsSkinEngine::NSISSetControlData "InstallProgressBar"  "$R1"  "ProgressInt"
+    nsSkinEngine::NSISSetControlData "InstallProgressBar"  "$R1" "TaskBarProgress"
+    nsSkinEngine::NSISSetControlData "progressTip"  "正在下载：$R2"  "text"
     DetailPrint '进度：$R1  下载文件名：$R2  是否完成：$R3'
 FunctionEnd
 
@@ -258,9 +271,9 @@ Function UpdateEventChangeCallback
     DetailPrint '需要更新'
         Call OnNextBtnFunc
         nsAutoUpdate::CurrentVersion
-        Pop $R0
-        DetailPrint '最新版本:$R0'
-        nsSkinEngine::NSISSetControlData "newVersionTextStep2"  $R0  "text"
+        Pop $varCurrentVersion
+        DetailPrint '可升版本:$varCurrentVersion'
+        nsSkinEngine::NSISSetControlData "newVersionTextStep2"  "可升版本：$varCurrentVersion"  "text"
         nsAutoUpdate::UpdateInfo
         Pop $R0
         DetailPrint '升级信息:$R0'
@@ -286,6 +299,7 @@ Function UpdateEventChangeCallback
             ${EndIf}
         ${EndIf}
     ${ElseIf} $varCurrentStep == '6'
+     Call NoNeedUpdate
     DetailPrint '不需要更新'
     ${ElseIf} $varCurrentStep == '7'
     DetailPrint '下载filelist.ini'
@@ -315,32 +329,54 @@ Function UpdateEventChangeCallback
     DetailPrint '替换自身'
     nsAutoUpdate::ReplaceUzipDirFileToCurrentDir "${UPDATE_NAME}" "${UPDATE_TEMP_NAME}"
     Pop $R1
-    IntCmp $R1 0 +5
-    DetailPrint '运行${UPDATE_TEMP_NAME}'
-    nsSkinEngine::NSISHideSkinEngine
-    Exec '"$EXEDIR\${UPDATE_TEMP_NAME}" /UpdateSelf /UpdateOther'
-    nsSkinEngine::NSISExitSkinEngine "false"
-    ;nsAutoUpdate::RunAsProcessByFilePath "$EXEDIR\${UPDATE_TEMP_NAME}" "/UpdateSelf /UpdateOther"
-    Goto +2
-    DetailPrint '替换${UPDATE_TEMP_NAME}失败'
+        ${If} $R1 == 1
+        DetailPrint '运行${UPDATE_TEMP_NAME}'
+        nsSkinEngine::NSISHideSkinEngine
+        MessageBox MB_OK "/UpdateSelf /UpdateOther $varCurrentParameters"
+        Exec '"$EXEDIR\${UPDATE_TEMP_NAME}" /UpdateSelf /UpdateOther $varCurrentParameters'
+        nsSkinEngine::NSISExitSkinEngine "false"
+        ${Else}
+            Call UpdateError
+        ${EndIf}
     ${ElseIf} $varCurrentStep == '18'
     DetailPrint '升级成功'
+    Call getLocalVersion
+    nsSkinEngine::NSISSetControlData "currentVersionTextStep4"  "当前版本：$varLocalVersion"  "text"
+    nsSkinEngine::NSISSetControlData "OkBtn"  "立即运行"  "text"
     nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "5"
     ${ElseIf} $varCurrentStep > '18' ;EVENT_SOME_ERROR
     DetailPrint "出错了 代号：$varCurrentStep"
-    ${If} $varCurrentStep == '21'
-    DetailPrint "需要提升权限"
-    nsAutoUpdate::RunAsProcessByFilePath "$EXEPATH" ""
-    DetailPrint "退出"
-    Abort
+        ${If} $varCurrentStep == '21'
+        DetailPrint "需要提升权限"
+        nsAutoUpdate::RunAsProcessByFilePath "$EXEPATH" "$varCurrentParameters"
+        nsSkinEngine::NSISExitSkinEngine "false"
+        ${ElseIf} $varCurrentStep == '19'
+         Call NetError
+        ${Else}
+         Call UpdateError
+        ${EndIf}
     ${EndIf}
-    ${EndIf}
+FunctionEnd
+
+Function NoNeedUpdate
+    nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "6"
+FunctionEnd
+
+Function NetError
+    nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "7"
+FunctionEnd
+
+Function UpdateError
+    nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "8"
 FunctionEnd
 
 Function OnUpdateFunc
     ${If} $varCurrentStep == '5'
     Call OnNextBtnFunc
+    nsSkinEngine::NSISSetControlData "newVersionTextStep3"  "升级版本：$varCurrentVersion"  "text"
     nsAutoUpdate::DownloadUpdateFileListIni
+    ${ElseIf} $varCurrentStep == '18'
+        Exec '"$INSTDIR\${MAIN_APP_NAME}"'
     ${EndIf}
 FunctionEnd
 
