@@ -19,7 +19,7 @@ Var IsUpdateOther
 Var varShowInstTimerId
 Var varCurrentStep
 ; 安装程序初始定义常量
-!define PRODUCT_VERSION "2016.01.11.000"
+!define PRODUCT_VERSION "2016.01.10.000"
 !define MAIN_APP_NAME "GoogleTranslate.exe"
 !define PRODUCT_NAME "Google Translate"
 !define PRODUCT_NAME_EN "Google Translate"
@@ -261,6 +261,7 @@ Function UpdateEventChangeCallback
     nsAutoUpdate::ReplaceFiles
     ${ElseIf} $varCurrentStep == '15'
     DetailPrint '替换文件'
+    nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "4"
     ${ElseIf} $varCurrentStep == '16'
     DetailPrint '替换文件成功'
     ${ElseIf} $varCurrentStep == '17'
@@ -275,6 +276,7 @@ Function UpdateEventChangeCallback
     DetailPrint '替换${UPDATE_TEMP_NAME}失败'
     ${ElseIf} $varCurrentStep == '18'
     DetailPrint '升级成功'
+    nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "5"
     ${ElseIf} $varCurrentStep > '18' ;EVENT_SOME_ERROR
     DetailPrint "出错了 代号：$varCurrentStep"
     ${If} $varCurrentStep == '21'
