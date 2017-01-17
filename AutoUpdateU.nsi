@@ -198,7 +198,7 @@ Function ProgressChangeCallback
     Pop $R1
     Pop $R2
     Pop $R3
-    nsSkinEngine::NSISSetControlData "progressText"  "$R1"  "text"
+    nsSkinEngine::NSISSetControlData "progressText"  "$R1%"  "text"
     nsSkinEngine::NSISSetControlData "InstallProgressBar"  "$R1"  "ProgressInt"
     DetailPrint '进度：$R1  下载文件名：$R2  是否完成：$R3'
 FunctionEnd
