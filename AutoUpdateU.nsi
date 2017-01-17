@@ -140,7 +140,7 @@ Function InstallProgress
    
    nsSkinEngine::NSISSetControlData "userFuckCheckBox"  "true"  "Checked"
    GetFunctionAddress $varShowInstTimerId InitUpdate
-   nsSkinEngine::NSISCreatTimer $varShowInstTimerId 1000
+   nsSkinEngine::NSISCreatTimer $varShowInstTimerId 1
    nsSkinEngine::NSISRunSkinEngine
 FunctionEnd
 
@@ -160,8 +160,9 @@ Function InitUpdate
     ${GetOptions} $R0 "/UpdateOther" $R1 # 在命令行里查找是否存在/T选项
     IfErrors 0 +3
     StrCpy $IsUpdateOther "0"
-    Goto +2
+    Goto +3
     StrCpy $IsUpdateOther "1"
+    nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "4"
     nsAutoUpdate::SetAppServerSettings "1" "65B70DE7540C42759156483165E35215" "http://update.aceui.cn/api/Public/Update/?"
     IntCmp $IsUpdateSelf 1 +3
     nsAutoUpdate::InitLog "false"
