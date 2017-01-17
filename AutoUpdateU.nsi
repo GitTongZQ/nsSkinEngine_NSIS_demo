@@ -16,6 +16,12 @@ Var FreeSpaceSize
 ;定义变量
 Var IsUpdateSelf
 Var IsUpdateOther
+Var IsAuto
+Var IsForced
+Var IsManual
+Var IsBackstage
+Var IsBanDisturb
+
 Var varShowInstTimerId
 Var varCurrentStep
 ; 安装程序初始定义常量
@@ -137,17 +143,37 @@ Function InstallProgress
     GetFunctionAddress $0 OnUpdateFunc
     nsSkinEngine::NSISOnControlBindNSISScript "OkBtn" $0
    ${EndIf}
-   
-   nsSkinEngine::NSISSetControlData "userFuckCheckBox"  "true"  "Checked"
+
    GetFunctionAddress $varShowInstTimerId InitUpdate
    nsSkinEngine::NSISCreatTimer $varShowInstTimerId 1
-   nsSkinEngine::NSISRunSkinEngine
+   nsSkinEngine::NSISRunSkinEngine "false"
 FunctionEnd
 
 Function InitUpdate
     nsSkinEngine::NSISKillTimer $varShowInstTimerId
     ${GetParameters} $R0 # 获得命令行
-    ;MessageBox MB_OK "$R0"
+    MessageBox MB_OK "$R0"
+    ClearErrors
+    ${GetParameters} $R0 # 获得命令行
+    ${GetOptions} $R0 "/Auto" $R1 # 在命令行里查找是否存在/T选项
+    IfErrors 0 +3
+    StrCpy $IsAuto "0"
+    Goto +2
+    StrCpy $IsAuto "1"
+    ClearErrors
+    ${GetParameters} $R0 # 获得命令行
+    ${GetOptions} $R0 "/Backstage" $R1 # 在命令行里查找是否存在/T选项
+    IfErrors 0 +3
+    StrCpy $IsBackstage "0"
+    Goto +2
+    StrCpy $IsBackstage "1"
+    ClearErrors
+    ${GetParameters} $R0 # 获得命令行
+    ${GetOptions} $R0 "/BanDisturb" $R1 # 在命令行里查找是否存在/T选项
+    IfErrors 0 +3
+    StrCpy $IsBanDisturb "0"
+    Goto +2
+    StrCpy $IsBanDisturb "1"
     ClearErrors
     ${GetOptions} $R0 "/UpdateSelf" $R1 # 在命令行里查找是否存在/T选项
     IfErrors 0 +3
@@ -163,25 +189,31 @@ Function InitUpdate
     Goto +3
     StrCpy $IsUpdateOther "1"
     nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "4"
+    ${If} $IsAuto == 0
+    nsSkinEngine::NSISShowSkinEngine
+    ${EndIf}
     nsAutoUpdate::SetAppServerSettings "1" "65B70DE7540C42759156483165E35215" "http://update.aceui.cn/api/Public/Update/?"
-    IntCmp $IsUpdateSelf 1 +3
+    ${If} $IsUpdateSelf == 0
     nsAutoUpdate::InitLog "false"
-    Goto +2
+    ${Else}
     nsAutoUpdate::InitLog "true"
+    ${EndIf}
     nsAutoUpdate::SetAppSettings "${UPDATE_NAME}" "$EXEDIR"
     GetFunctionAddress $0 UpdateEventChangeCallback 
     nsAutoUpdate::SetUpdateEventChangeCallback $0
     GetFunctionAddress $0 ProgressChangeCallback 
     nsAutoUpdate::SetProgressChangeCallback $0
     
-    IntCmp $IsUpdateOther 1 +2
+    ${If} $IsUpdateOther == 0
     nsAutoUpdate::RequestUpdateInfo
-    IntCmp $IsUpdateSelf 0 +2
+    ${EndIf}
+    ${If} $IsUpdateSelf == 1
     nsAutoUpdate::ReplaceUzipDirFileToCurrentDir "${UPDATE_NAME}" "${UPDATE_NAME}"
-    IntCmp $IsUpdateOther 0 +3
+    ${EndIf}
+    ${If} $IsUpdateOther == 1
     GetFunctionAddress $0 ReplaceOtherFiles
     BgWorker::CallAndWait
-    ;
+    ${EndIf}
 FunctionEnd
 
 Function OnInstallMinFunc
@@ -224,26 +256,39 @@ Function UpdateEventChangeCallback
     DetailPrint '升级无效'
     ${ElseIf} $varCurrentStep == '5'
     DetailPrint '需要更新'
-    Call OnNextBtnFunc
-    nsAutoUpdate::CurrentVersion
-    Pop $R0
-    DetailPrint '最新版本:$R0'
-    nsSkinEngine::NSISSetControlData "newVersionTextStep2"  $R0  "text"
-    nsAutoUpdate::UpdateInfo
-    Pop $R0
-    DetailPrint '升级信息:$R0'
-    nsSkinEngine::NSISSetControlData "updateInfo"  $R0  "text"
-    nsAutoUpdate::IsBackstage
-    Pop $R0
-    DetailPrint '是否后台:$R0'
-    nsAutoUpdate::IsManual
-    Pop $R0
-    DetailPrint '是否手动:$R0'
-    nsAutoUpdate::IsForced
-    Pop $R0
-    DetailPrint '是否强制:$R0'
-    DetailPrint '开始下载filelist.ini'
-    ;nsAutoUpdate::DownloadUpdateFileListIni
+        Call OnNextBtnFunc
+        nsAutoUpdate::CurrentVersion
+        Pop $R0
+        DetailPrint '最新版本:$R0'
+        nsSkinEngine::NSISSetControlData "newVersionTextStep2"  $R0  "text"
+        nsAutoUpdate::UpdateInfo
+        Pop $R0
+        DetailPrint '升级信息:$R0'
+        nsSkinEngine::NSISSetControlData "updateInfo"  $R0  "text"
+        nsAutoUpdate::IsBackstage
+        Pop $IsBackstage
+        DetailPrint '是否后台:$R0'
+        nsAutoUpdate::IsManual
+        Pop $IsManual
+        DetailPrint '是否手动:$R0'
+        nsAutoUpdate::IsForced
+        Pop $IsForced
+        DetailPrint '是否强制:$R0'
+        
+        ${If} $IsBanDisturb == 1
+        ${AndIf} $IsForced != 1
+        ${AndIf} $IsAuto == 1
+            Call OnInstallCancelFunc
+        ${ElseIf} $IsAuto == 1
+        ${AndIf} $IsManual == 1
+            Call OnInstallCancelFunc
+        ${ElseIf} $IsAuto == 1
+        ${AndIf} $IsBackstage == 1
+            nsAutoUpdate::DownloadUpdateFileListIni
+        ${ElseIf} $IsAuto == 1
+        ${AndIf} $IsBackstage == 0
+            nsSkinEngine::NSISShowLowerRight
+        ${EndIf}
     ${ElseIf} $varCurrentStep == '6'
     DetailPrint '不需要更新'
     ${ElseIf} $varCurrentStep == '7'
