@@ -147,7 +147,7 @@ FunctionEnd
 Function InitUpdate
     nsSkinEngine::NSISKillTimer $varShowInstTimerId
     ${GetParameters} $R0 # 获得命令行
-    MessageBox MB_OK "$R0"
+    ;MessageBox MB_OK "$R0"
     ClearErrors
     ${GetOptions} $R0 "/UpdateSelf" $R1 # 在命令行里查找是否存在/T选项
     IfErrors 0 +3
@@ -162,7 +162,6 @@ Function InitUpdate
     StrCpy $IsUpdateOther "0"
     Goto +2
     StrCpy $IsUpdateOther "1"
-    MessageBox MB_OK "$IsUpdateSelf $IsUpdateOther"
     nsAutoUpdate::SetAppServerSettings "1" "65B70DE7540C42759156483165E35215" "http://update.aceui.cn/api/Public/Update/?"
     IntCmp $IsUpdateSelf 1 +3
     nsAutoUpdate::InitLog "false"
@@ -178,8 +177,10 @@ Function InitUpdate
     nsAutoUpdate::RequestUpdateInfo
     IntCmp $IsUpdateSelf 0 +2
     nsAutoUpdate::ReplaceUzipDirFileToCurrentDir "${UPDATE_NAME}" "${UPDATE_NAME}"
-    IntCmp $IsUpdateOther 0 +2
-    nsAutoUpdate::ReplaceOtherFiles
+    IntCmp $IsUpdateOther 0 +3
+    GetFunctionAddress $0 ReplaceOtherFiles
+    BgWorker::CallAndWait
+    ;
 FunctionEnd
 
 Function OnInstallMinFunc
@@ -192,6 +193,10 @@ FunctionEnd
 
 Function OnInstallCancelFunc
     nsSkinEngine::NSISExitSkinEngine "false"
+FunctionEnd
+
+Function ReplaceOtherFiles
+   nsAutoUpdate::ReplaceOtherFiles
 FunctionEnd
 
 Function ProgressChangeCallback
@@ -270,7 +275,9 @@ Function UpdateEventChangeCallback
     Pop $R1
     IntCmp $R1 0 +5
     DetailPrint '运行${UPDATE_TEMP_NAME}'
+    nsSkinEngine::NSISHideSkinEngine
     Exec '"$EXEDIR\${UPDATE_TEMP_NAME}" /UpdateSelf /UpdateOther'
+    nsSkinEngine::NSISExitSkinEngine "false"
     ;nsAutoUpdate::RunAsProcessByFilePath "$EXEDIR\${UPDATE_TEMP_NAME}" "/UpdateSelf /UpdateOther"
     Goto +2
     DetailPrint '替换${UPDATE_TEMP_NAME}失败'
