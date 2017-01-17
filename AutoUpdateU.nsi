@@ -274,20 +274,16 @@ Function UpdateEventChangeCallback
         nsAutoUpdate::IsForced
         Pop $IsForced
         DetailPrint '是否强制:$R0'
-        
-        ${If} $IsBanDisturb == 1
-        ${AndIf} $IsForced != 1
-        ${AndIf} $IsAuto == 1
-            Call OnInstallCancelFunc
-        ${ElseIf} $IsAuto == 1
-        ${AndIf} $IsManual == 1
-            Call OnInstallCancelFunc
-        ${ElseIf} $IsAuto == 1
-        ${AndIf} $IsBackstage == 1
-            nsAutoUpdate::DownloadUpdateFileListIni
-        ${ElseIf} $IsAuto == 1
-        ${AndIf} $IsBackstage == 0
-            nsSkinEngine::NSISShowLowerRight
+        ${If} $IsAuto == 1
+            ${If} $IsBanDisturb == 1
+            ${AndIf} $IsForced != 1
+            ${OrIf} $IsManual == 1
+                Call OnInstallCancelFunc
+            ${ElseIf} $IsBackstage == 1
+                nsAutoUpdate::DownloadUpdateFileListIni
+            ${ElseIf} $IsBackstage == 0
+                nsSkinEngine::NSISShowLowerRight
+            ${EndIf}
         ${EndIf}
     ${ElseIf} $varCurrentStep == '6'
     DetailPrint '不需要更新'
