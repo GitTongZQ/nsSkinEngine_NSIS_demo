@@ -154,8 +154,8 @@ Function InstallProgress
 FunctionEnd
 
 Function InitUpdate
-    Call CheckUpdateMark
     nsSkinEngine::NSISKillTimer $varShowInstTimerId
+    Call CheckUpdateMark
     ${GetParameters} $varCurrentParameters # 获得命令行
     ;MessageBox MB_OK "$varCurrentParameters"
     ClearErrors
@@ -269,6 +269,7 @@ Function removeUpdateMark
 FunctionEnd
 
 Function CheckUpdateMark
+    ClearErrors
     ReadRegStr $IsHasUpdateMark HKCU "${PRODUCT_KEY}" "ReplaceTag"
     IfErrors 0 +2
     StrCpy $IsHasUpdateMark "0"
