@@ -21,6 +21,7 @@ Var IsForced
 Var IsManual
 Var IsBackstage
 Var IsBanDisturb
+Var IsHasUpdateMark
 
 Var varShowInstTimerId
 Var varCurrentStep
@@ -37,6 +38,7 @@ Var varCurrentParameters
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${MAIN_APP_NAME}"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_AUTORUN_KEY "Software\Microsoft\Windows\CurrentVersion\Run"
+!define PRODUCT_KEY "Software\Aceui\update"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 !define MUI_ICON "resouce\Update\app.ico"
 !define MUI_UNICON "resouce\Update\app.ico"
@@ -152,6 +154,7 @@ Function InstallProgress
 FunctionEnd
 
 Function InitUpdate
+    Call CheckUpdateMark
     nsSkinEngine::NSISKillTimer $varShowInstTimerId
     ${GetParameters} $varCurrentParameters # 获得命令行
     ;MessageBox MB_OK "$varCurrentParameters"
@@ -211,16 +214,22 @@ Function InitUpdate
     nsAutoUpdate::SetUpdateEventChangeCallback $0
     GetFunctionAddress $0 ProgressChangeCallback 
     nsAutoUpdate::SetProgressChangeCallback $0
-    
-    ${If} $IsUpdateOther == 0
-    nsAutoUpdate::RequestUpdateInfo
-    ${EndIf}
-    ${If} $IsUpdateSelf == 1
-    nsAutoUpdate::ReplaceUzipDirFileToCurrentDir "${UPDATE_NAME}" "${UPDATE_NAME}"
-    ${EndIf}
-    ${If} $IsUpdateOther == 1
-    GetFunctionAddress $0 ReplaceOtherFiles
-    BgWorker::CallAndWait
+    ${If} $IsHasUpdateMark == 1
+        nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "4"
+        nsSkinEngine::NSISShowSkinEngine
+        GetFunctionAddress $0 ReplaceFiles
+        BgWorker::CallAndWait
+    ${Else}
+        ${If} $IsUpdateOther == 0
+        nsAutoUpdate::RequestUpdateInfo
+        ${EndIf}
+        ${If} $IsUpdateSelf == 1
+        nsAutoUpdate::ReplaceUzipDirFileToCurrentDir "${UPDATE_NAME}" "${UPDATE_NAME}"
+        ${EndIf}
+        ${If} $IsUpdateOther == 1
+        GetFunctionAddress $0 ReplaceOtherFiles
+        BgWorker::CallAndWait
+        ${EndIf}
     ${EndIf}
 FunctionEnd
 
@@ -233,7 +242,14 @@ Function OnNextBtnFunc
 FunctionEnd
 
 Function OnInstallCancelFunc
+    ${If} $varCurrentStep == '14'
+    Call WriteUpdateMark
+    ${Endif}
     nsSkinEngine::NSISExitSkinEngine "false"
+FunctionEnd
+
+Function ReplaceFiles
+    nsAutoUpdate::ReplaceFiles
 FunctionEnd
 
 Function ReplaceOtherFiles
@@ -242,6 +258,21 @@ FunctionEnd
 
 Function getLocalVersion
    StrCpy $varLocalVersion "2016.01.10.000"
+FunctionEnd
+
+Function WriteUpdateMark
+    WriteRegStr HKCU "${PRODUCT_KEY}" "ReplaceTag" "1"
+FunctionEnd
+
+Function removeUpdateMark
+    WriteRegStr HKCU "${PRODUCT_KEY}" "ReplaceTag" "0"
+FunctionEnd
+
+Function CheckUpdateMark
+    ReadRegStr $IsHasUpdateMark HKCU "${PRODUCT_KEY}" "ReplaceTag"
+    IfErrors 0 +2
+    StrCpy $IsHasUpdateMark "0"
+    ;
 FunctionEnd
 
 Function ProgressChangeCallback
@@ -335,6 +366,7 @@ Function UpdateEventChangeCallback
         ${Endif}
     ${ElseIf} $varCurrentStep == '15'
     DetailPrint '替换文件'
+    Call removeUpdateMark
     nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "4"
     ${ElseIf} $varCurrentStep == '16'
     DetailPrint '替换文件成功'
@@ -385,10 +417,6 @@ FunctionEnd
 
 Function UpdateError
     nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "8"
-FunctionEnd
-
-Function WriteUpdateMark
-    ;nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "8"
 FunctionEnd
 
 Function OnUpdateFunc
