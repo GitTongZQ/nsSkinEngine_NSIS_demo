@@ -429,6 +429,7 @@ Function OnUpdateFunc
         nsAutoUpdate::ReplaceFiles
     ${ElseIf} $varCurrentStep == '18'
         Exec '"$EXEDIR\${MAIN_APP_NAME}"'
+        nsSkinEngine::NSISExitSkinEngine "false"
     ${EndIf}
 FunctionEnd
 
