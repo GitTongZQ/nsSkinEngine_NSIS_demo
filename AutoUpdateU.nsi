@@ -197,6 +197,7 @@ Function InitUpdate
     nsSkinEngine::NSISShowSkinEngine
     ${ElseIf} $IsAuto == 1
     ${AndIf} $IsUpdateSelf == 1
+    ${AndIf} $IsBackstage == 0
     nsSkinEngine::NSISShowLowerRight
     ${EndIf}
     nsAutoUpdate::SetAppServerSettings "1" "65B70DE7540C42759156483165E35215" "http://update.aceui.cn"
@@ -319,7 +320,19 @@ Function UpdateEventChangeCallback
     DetailPrint '解压文件'
     ${ElseIf} $varCurrentStep == '14'
     DetailPrint '解压文件成功'
-    nsAutoUpdate::ReplaceFiles
+    nsUtils::NSISIsProcessRunningByFilePath "$EXEDIR\${MAIN_APP_NAME}"
+    Pop $R1
+        ${If} $R1 == 1
+        ${AndIf} $IsBackstage == 0
+        nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "3"
+        ${ElseIf} $R1 == 1
+        ${AndIf} $IsBackstage == 1
+        ${AndIf} $IsAuto == 1
+        Call WriteUpdateMark
+        nsSkinEngine::NSISExitSkinEngine "false"
+        ${Else}
+        nsAutoUpdate::ReplaceFiles
+        ${Endif}
     ${ElseIf} $varCurrentStep == '15'
     DetailPrint '替换文件'
     nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "4"
@@ -339,10 +352,15 @@ Function UpdateEventChangeCallback
         ${EndIf}
     ${ElseIf} $varCurrentStep == '18'
     DetailPrint '升级成功'
-    Call getLocalVersion
-    nsSkinEngine::NSISSetControlData "currentVersionTextStep4"  "当前版本：$varLocalVersion"  "text"
-    nsSkinEngine::NSISSetControlData "OkBtn"  "立即运行"  "text"
-    nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "5"
+        ${If} $IsAuto == 1
+        ${AndIf} $IsBackstage == 1
+        nsSkinEngine::NSISExitSkinEngine "false"
+        ${Else}
+        Call getLocalVersion
+        nsSkinEngine::NSISSetControlData "currentVersionTextStep4"  "当前版本：$varLocalVersion"  "text"
+        nsSkinEngine::NSISSetControlData "OkBtn"  "立即运行"  "text"
+        nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "5"
+        ${EndIf}
     ${ElseIf} $varCurrentStep > '18' ;EVENT_SOME_ERROR
     DetailPrint "出错了 代号：$varCurrentStep"
         ${If} $varCurrentStep == '21'
@@ -369,30 +387,25 @@ Function UpdateError
     nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "8"
 FunctionEnd
 
+Function WriteUpdateMark
+    ;nsSkinEngine::NSISSetTabLayoutCurrentIndex "WizardTab" "8"
+FunctionEnd
+
 Function OnUpdateFunc
     ${If} $varCurrentStep == '5'
     Call OnNextBtnFunc
     nsSkinEngine::NSISSetControlData "newVersionTextStep3"  "升级版本：$varCurrentVersion"  "text"
     nsAutoUpdate::DownloadUpdateFileListIni
+    ${ElseIf} $varCurrentStep == '14'
+        KillProcDLL::KillProc "${MAIN_APP_NAME}"
+        nsAutoUpdate::ReplaceFiles
     ${ElseIf} $varCurrentStep == '18'
-        Exec '"$INSTDIR\${MAIN_APP_NAME}"'
+        Exec '"$EXEDIR\${MAIN_APP_NAME}"'
     ${EndIf}
 FunctionEnd
 
 Function InstallShow
      
-FunctionEnd
-
-Function OnCompleteBtnFunc
-    nsSkinEngine::NSISHideSkinEngine
-    nsSkinEngine::NSISGetControlData "autoCheckBox" "Checked" ;
-    Pop $0
-    ${If} $0 == "1"
-      WriteRegStr HKCU "${PRODUCT_AUTORUN_KEY}" "${PRODUCT_NAME}" "$INSTDIR\${MAIN_APP_NAME} -mini"
-    ${EndIf}
-	
-    Exec '"$INSTDIR\${MAIN_APP_NAME}"'
-    nsSkinEngine::NSISExitSkinEngine "false"
 FunctionEnd
 
 ;刷新关联图标
