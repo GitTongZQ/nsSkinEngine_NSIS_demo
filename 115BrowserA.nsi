@@ -210,7 +210,7 @@ Function InstallProgress
    nsSkinEngine::NSISSetControlData "2345CheckBox"  "true"  "Checked"
    nsSkinEngine::NSISSetControlData "autoCheckBox"  "true"  "Checked"
    nsSkinEngine::NSISSetControlData "userFuckCheckBox"  "true"  "Checked"
-   nsSkinEngine::NSISRunSkinEngine
+   nsSkinEngine::NSISRunSkinEngine "true"
 FunctionEnd
 
 Function OnNextBtnFunc
@@ -491,7 +491,7 @@ Function un.UninstallProgress
    ${EndIf}
    
    ;--------------------------------------¥∞ÃÂœ‘ æ-----------------------------------
-   nsSkinEngine::NSISRunSkinEngine
+   nsSkinEngine::NSISRunSkinEngine "true"
 FunctionEnd
 
 Function un.OnUnInstallCancelFunc

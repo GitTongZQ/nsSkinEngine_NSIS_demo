@@ -180,7 +180,7 @@ Function InstallProgress
    nsSkinEngine::NSISInitAnimationBkControl "windowbk" "${UNINSTALL_DIR}\step" "145" "90" "1" "68" $0 $1
    nsSkinEngine::NSISStartAnimationBkControl "0" "33"
    nsSkinEngine::NSISSetControlData "welcomeText"  "false"  "visible"
-   nsSkinEngine::NSISRunSkinEngine
+   nsSkinEngine::NSISRunSkinEngine "true"
 FunctionEnd
 
 Function goAheadCallback
@@ -476,7 +476,7 @@ Function un.UninstallProgress
    ${EndIf}
    ;--------------------------------------¥∞ÃÂœ‘ æ-----------------------------------
    nsSkinEngine::NSISSetControlData "SavaData_CheckBox"  "true"  "Checked"
-   nsSkinEngine::NSISRunSkinEngine
+   nsSkinEngine::NSISRunSkinEngine "true"
 FunctionEnd
 
 Function un.OnUnInstallCancelFunc
