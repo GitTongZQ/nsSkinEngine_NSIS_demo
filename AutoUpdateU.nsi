@@ -402,7 +402,7 @@ Function UpdateEventChangeCallback
         Pop $R0
             ${If} $R0 == 0
                 Call UpdateError
-            ${ElseIf}
+            ${Else}
                 nsSkinEngine::NSISExitSkinEngine "false"
             ${EndIf}
         ${ElseIf} $varCurrentStep == '19'
