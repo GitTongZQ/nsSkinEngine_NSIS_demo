@@ -399,7 +399,12 @@ Function UpdateEventChangeCallback
         ${If} $varCurrentStep == '21'
         DetailPrint "需要提升权限"
         nsAutoUpdate::RunAsProcessByFilePath "$EXEPATH" "$varCurrentParameters"
-        nsSkinEngine::NSISExitSkinEngine "false"
+        Pop $R0
+            ${If} $R0 == 0
+                Call UpdateError
+            ${ElseIf}
+                nsSkinEngine::NSISExitSkinEngine "false"
+            ${EndIf}
         ${ElseIf} $varCurrentStep == '19'
          Call NetError
         ${Else}
