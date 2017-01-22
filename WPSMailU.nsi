@@ -178,7 +178,7 @@ Function InstallProgress
    GetFunctionAddress $0 goAheadCallback
    GetFunctionAddress $1 retreatCallback
    nsSkinEngine::NSISInitAnimationBkControl "windowbk" "${UNINSTALL_DIR}\step" "145" "90" "1" "68" $0 $1
-   nsSkinEngine::NSISStartAnimationBkControl "0" "33"
+   nsSkinEngine::NSISStartAnimationBkControl "windowbk" "0" "33"
    nsSkinEngine::NSISSetControlData "welcomeText"  "false"  "visible"
    nsSkinEngine::NSISRunSkinEngine "true"
 FunctionEnd
@@ -199,7 +199,7 @@ FunctionEnd
 Function OnNextBtnFunc
    nsSkinEngine::NSISNextTab "WizardTab"
    Call goAheadCallback
-   nsSkinEngine::NSISStartAnimationBkControl "90" "33"
+   nsSkinEngine::NSISStartAnimationBkControl "windowbk" "90" "33"
 FunctionEnd
 
 Function OnInstallCancelFunc
@@ -357,7 +357,7 @@ SectionEnd
 
 Function OnCompleteBtnFunc
     nsSkinEngine::NSISHideSkinEngine
-    nsSkinEngine::NSISStopAnimationBkControl
+    nsSkinEngine::NSISStopAnimationBkControl "windowbk"
     nsSkinEngine::NSISGetControlData "CompleteTab_AutoRunCheckBox" "Checked" ;
     Pop $0
     ${If} $0 == "1"
