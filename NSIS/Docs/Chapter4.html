@@ -1438,6 +1438,8 @@ VIAddVersionKey /LANG=${LANG_ENGLISH} &quot;FileVersion&quot; &quot;1.2.3&quot;
 <p>Delete file (which can be a file or wildcard, but should be specified with a full path) from the target system. If /REBOOTOK is specified and the file cannot be deleted then the file is deleted when the system reboots -- if the file will be deleted on a reboot, the reboot flag will be set. The error flag is set if files are found and cannot be deleted. The error flag is not set when trying to delete a file that does not exist.</p>
 <pre>Delete $INSTDIR\somefile.dat
 </pre>
+
+<p><div class="wb"> <b>Warning:</b> The /REBOOTOK switch requires administrator rights on Windows NT and later. </div></p>
 <a name="exec"></a><h4>4.9.1.2 Exec</h4>
 <pre>command
 </pre>
@@ -1515,6 +1517,8 @@ File /r /x *.res /x *.obj /x *.pch source\*.*
 <p>If no absolute path is specified the current folder will be used. The current folder is the folder set using the last <a href="Chapter4.html#setoutpath">SetOutPath</a> instruction. If you have not used <a href="Chapter4.html#setoutpath">SetOutPath</a> the current folder is <a href="Chapter4.html#varother">$EXEDIR</a>.</p>
 <pre>Rename $INSTDIR\file.ext $INSTDIR\file.dat
 </pre>
+
+<p><div class="wb"> <b>Warning:</b> The /REBOOTOK switch requires administrator rights on Windows NT and later. </div></p>
 <a name="reservefile"></a><h4>4.9.1.7 ReserveFile</h4>
 <pre>[/nonfatal] [/r] [/x file|wildcard [...]] file [file...] | [/nonfatal] /plugin file.dll
 </pre>
@@ -1546,12 +1550,14 @@ SetOutPath $TEMP
 RMDir $TEMP\dir
 </pre>
 
-<p><b>Warning:</b> using <em>RMDir /r $INSTDIR</em> in the uninstaller is not safe. Though it is unlikely, the user might select to install to the Program Files folder and so this command will wipe out the entire Program Files folder, including other programs that has nothing to do with the uninstaller. The user can also put other files but the program's files and would expect them to get deleted with the program. Solutions are <a href="http://nsis.sourceforge.net/Uninstall_only_installed_files">available</a> for easily uninstalling only files which were installed by the installer.</p>
+<p><div class="wb"> <b>Warning:</b> Using <em>RMDir /r $INSTDIR</em> in the uninstaller is not safe. Though it is unlikely, the user might select to install to the root of the Program Files folder and this command would wipe out the entire Program Files folder, including all other installed programs! The user can also put other files in the installation folder and wouldn't expect them to get deleted along with the program. Solutions are <a href="http://nsis.sourceforge.net/Uninstall_only_installed_files">available</a> for easily uninstalling only files which were installed by the installer. </div></p>
+
+<p><div class="wb"> <b>Warning:</b> The /REBOOTOK switch requires administrator rights on Windows NT and later. </div></p>
 <a name="setoutpath"></a><h4>4.9.1.9 SetOutPath</h4>
 <pre>outpath
 </pre>
 
-<p>Sets the output path ($OUTDIR) and creates it (recursively if necessary), if it does not exist. Must be a full pathname, usually is just $INSTDIR (you can specify $INSTDIR if you are lazy with a single &quot;-&quot;).</p>
+<p>Sets the output path ($OUTDIR) and creates it (recursively if necessary), if it does not exist. Must be a full pathname, usually is just $INSTDIR (you can specify $INSTDIR with a single &quot;-&quot; if you are lazy).</p>
 <pre>SetOutPath $INSTDIR
 File program.exe
 </pre>
@@ -1713,7 +1719,14 @@ WriteINIStr $TEMP\something.ini section2 nsis true
 <p>The error flag is set if the string could not be written to the registry. The type of the string will be REG_SZ for <a href="Chapter4.html#writeregstr">WriteRegStr</a>, or REG_EXPAND_STR for <a href="Chapter4.html#writeregexpandstr">WriteRegExpandStr</a>. If the registry key doesn't exist it will be created.</p>
 <pre>WriteRegExpandStr HKLM &quot;Software\My Company\My Software&quot; &quot;Expand String Value&quot; &quot;%WINDIR%\notepad.exe&quot;
 </pre>
-<a name="setregview"></a><h4>4.9.2.18 SetRegView</h4>
+<a name="writeregmultistr"></a><h4>4.9.2.18 WriteRegMultiStr</h4>
+<pre>/REGEDIT5 root_key subkey key_name value
+</pre>
+
+<p>Writes a multi-string value. The /REGEDIT5 switch must be used and specifies that the data is in the hex format used by .reg files on Windows 2000 and later.</p>
+<pre>WriteRegMultiStr /REGEDIT5 HKCU &quot;Software\NSIS\Test&quot; &quot;Multi Value&quot; 66,00,6f,00,6f,00,00,00,62,00,61,00,72,00,00,00,00,00
+</pre>
+<a name="setregview"></a><h4>4.9.2.19 SetRegView</h4>
 <pre><b>32</b>|64|lastused
 </pre>
 
@@ -2754,7 +2767,7 @@ FindWindow $1 &quot;#32770&quot; &quot;&quot; $HWNDPARENT
 GetDlgItem $0 $1 1006
 SetCtlColors $0 0xFF0000 0x00FF00 ; Red on Green
 GetDlgItem $0 $1 1022
-SetCtlColors $0 SYSCLR:23 SYSCLR:24
+SetCtlColors $0 SYSCLR:23 SYSCLR:24 ; COLOR_INFOTEXT on COLOR_INFOBK
 FunctionEnd
 </pre>
 
@@ -2817,7 +2830,7 @@ LicenseData $(license)
 
 <p>As of version 2 NSIS fully supports multiple languages. The interface of one installer can support multiple languages.</p>
 
-<p>Use <a href="Chapter4.html#loadlanguagefile">LoadLanguageFile</a> for every language to load the default interface texts and language properties.</p>
+<p>Use <a href="Chapter4.html#loadlanguagefile">LoadLanguageFile</a> for every language to load the default interface texts and language properties. Visit the <a href="http://forums.winamp.com/showthread.php?t=157119">NSIS translations forum</a> for more information about creating new language files.</p>
 
 <p>The default interface texts can easily be changed using instructions like <a href="Chapter4.html#acomponenttext">ComponentText</a> etc.</p>
 

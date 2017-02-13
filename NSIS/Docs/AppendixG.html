@@ -111,7 +111,7 @@ scons MSTOOLKIT=yes
 
 <p>As of NSIS 2.01, the compiler, makensis, also compiles on POSIX platforms. POSIX platforms include Linux, *BSD, Mac OS X and others. Since the generated installer will eventually run on Windows, a <a href="http://www.libsdl.org/extras/win32/cross/README.txt">cross-compiler</a> is needed in order to compile them.</p>
 
-<p>The command line option XGCC_W32_PREFIX could be used to explicitly select a specific win32 targeted cross compiler. The value of XGCC_W32_PREFIX has to be the prefix of the toolchain. For example XGCC_W32_PREFIX=i686-w64-mingw32 would deploy the win32 targeted MinGW-w64 cross compiler if it is available on the build system.</p>
+<p>The command line option XGCC_W32_PREFIX could be used to explicitly select a specific win32 targeted cross compiler. The value of XGCC_W32_PREFIX has to be the prefix of the toolchain. For example XGCC_W32_PREFIX=i686-w64-mingw32- would deploy the win32 targeted MinGW-w64 cross compiler if it is available on the build system.</p>
 
 <p>If no cross-compiler is available, use the following:</p>
 <pre>scons SKIPSTUBS=all SKIPPLUGINS=all SKIPUTILS=all SKIPMISC=all
