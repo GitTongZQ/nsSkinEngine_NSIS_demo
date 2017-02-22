@@ -15,6 +15,6 @@ LicenseKey "8749afbd7acf4a170be5614d512d9522"
 OutFile "output\TestStatistics.exe"
 Section "xxxxx"
     nsStatistics::InitCommonStatistics
-    nsStatistics::AddOneAttribute "step" "3"
+    nsStatistics::AddOneAttribute "step" "0"
     nsStatistics::SendStatisticsInfo "http://127.0.0.1" "65B70DE7540C42759156483165E35215" "1"
 SectionEnd
