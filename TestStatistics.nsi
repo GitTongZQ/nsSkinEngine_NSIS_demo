@@ -14,7 +14,6 @@ LicenseKey "8749afbd7acf4a170be5614d512d9522"
 ;初始化数据
 OutFile "output\TestStatistics.exe"
 Section "xxxxx"
-    MessageBox MB_OK "fuck you"
     nsStatistics::InitCommonStatistics
     nsStatistics::AddOneAttribute "step" "3"
     nsStatistics::SendStatisticsInfo "http://127.0.0.1" "65B70DE7540C42759156483165E35215" "1"
