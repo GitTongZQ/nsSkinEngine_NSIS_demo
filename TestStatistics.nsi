@@ -16,5 +16,5 @@ OutFile "output\TestStatistics.exe"
 Section "xxxxx"
     nsStatistics::InitCommonStatistics
     nsStatistics::AddOneAttribute "step" "0"
-    nsStatistics::SendStatisticsInfo "http://127.0.0.1" "65B70DE7540C42759156483165E35215" "1"
+    nsStatistics::SendStatisticsInfo "http://update.aceui.cn" "65B70DE7540C42759156483165E35215" "1"
 SectionEnd
