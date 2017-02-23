@@ -9,6 +9,7 @@ LicenseKey "8749afbd7acf4a170be5614d512d9522"
 !include "MUI.nsh"
 !include "FileFunc.nsh"
 !include "StdUtils.nsh"
+Unicode true
 ;Languages 
 !insertmacro MUI_LANGUAGE "SimpChinese"
 ;初始化数据
