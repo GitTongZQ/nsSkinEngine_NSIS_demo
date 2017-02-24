@@ -15,7 +15,9 @@ Unicode true
 ;初始化数据
 OutFile "output\TestStatistics.exe"
 Section "xxxxx"
+    MessageBox MB_OK ""
     nsStatistics::InitCommonStatistics
     nsStatistics::AddOneAttribute "step" "0"
+    nsStatistics::AddOneAttribute "currentversion" "1.0.0.1"
     nsStatistics::SendStatisticsInfo "http://update.aceui.cn" "65B70DE7540C42759156483165E35215" "1"
 SectionEnd
